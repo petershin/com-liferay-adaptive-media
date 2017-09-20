@@ -52,29 +52,31 @@ public class ContentTransformerTest {
 	public void testIgnoresTheContentTransformersForDifferentContentTypes()
 		throws Exception {
 
-		ContentTransformerContentType<String> contentTypeA =
+		ContentTransformerContentType<String> contentTransformerContentTypeA =
 			new TestContentTransformerContentType<>();
-		TestContentTransformerContentType<String> contentTypeB =
+		ContentTransformerContentType<String> contentTransformerContentTypeB =
 			new TestContentTransformerContentType<>();
 
 		String transformedContentA = "transformedContentA";
 		String transformedContentB = "transformedContentB";
 
 		_registerContentTransformer(
-			contentTypeA, _ORIGINAL_CONTENT, transformedContentA);
+			contentTransformerContentTypeA, _ORIGINAL_CONTENT,
+			transformedContentA);
 
 		_registerContentTransformer(
-			contentTypeB, _ORIGINAL_CONTENT, transformedContentB);
+			contentTransformerContentTypeB, _ORIGINAL_CONTENT,
+			transformedContentB);
 
 		Assert.assertEquals(
 			transformedContentA,
 			_contentTransformerHandler.transform(
-				contentTypeA, _ORIGINAL_CONTENT));
+				contentTransformerContentTypeA, _ORIGINAL_CONTENT));
 
 		Assert.assertEquals(
 			transformedContentB,
 			_contentTransformerHandler.transform(
-				contentTypeB, _ORIGINAL_CONTENT));
+				contentTransformerContentTypeB, _ORIGINAL_CONTENT));
 	}
 
 	@Test
@@ -86,16 +88,17 @@ public class ContentTransformerTest {
 		String finalTransformedContent = "finalTransformedContent";
 
 		_registerContentTransformer(
-			_contentType, _ORIGINAL_CONTENT, intermediateTransformedContent);
+			_contentTransfomerContentType, _ORIGINAL_CONTENT,
+			intermediateTransformedContent);
 
 		_registerContentTransformer(
-			_contentType, intermediateTransformedContent,
+			_contentTransfomerContentType, intermediateTransformedContent,
 			finalTransformedContent);
 
 		Assert.assertEquals(
 			finalTransformedContent,
 			_contentTransformerHandler.transform(
-				_contentType, _ORIGINAL_CONTENT));
+				_contentTransfomerContentType, _ORIGINAL_CONTENT));
 	}
 
 	@Test
@@ -105,24 +108,26 @@ public class ContentTransformerTest {
 		String transformedContent = "transformedContent";
 
 		_registerContentTransformer(
-			_contentType, _ORIGINAL_CONTENT, transformedContent);
+			_contentTransfomerContentType, _ORIGINAL_CONTENT,
+			transformedContent);
 
 		Assert.assertEquals(
 			transformedContent,
 			_contentTransformerHandler.transform(
-				_contentType, _ORIGINAL_CONTENT));
+				_contentTransfomerContentType, _ORIGINAL_CONTENT));
 	}
 
 	@Test
 	public void testReturnsTheSameContentIfATransformerThrowsAnException()
 		throws Exception {
 
-		_registerFailingContentTransformer(_contentType, _ORIGINAL_CONTENT);
+		_registerFailingContentTransformer(
+			_contentTransfomerContentType, _ORIGINAL_CONTENT);
 
 		Assert.assertSame(
 			_ORIGINAL_CONTENT,
 			_contentTransformerHandler.transform(
-				_contentType, _ORIGINAL_CONTENT));
+				_contentTransfomerContentType, _ORIGINAL_CONTENT));
 	}
 
 	@Test
@@ -130,7 +135,7 @@ public class ContentTransformerTest {
 		Assert.assertSame(
 			_ORIGINAL_CONTENT,
 			_contentTransformerHandler.transform(
-				_contentType, _ORIGINAL_CONTENT));
+				_contentTransfomerContentType, _ORIGINAL_CONTENT));
 	}
 
 	@Test
@@ -139,19 +144,21 @@ public class ContentTransformerTest {
 
 		String transformedContent = "transformedContent";
 
-		_registerFailingContentTransformer(_contentType, _ORIGINAL_CONTENT);
+		_registerFailingContentTransformer(
+			_contentTransfomerContentType, _ORIGINAL_CONTENT);
 
 		_registerContentTransformer(
-			_contentType, _ORIGINAL_CONTENT, transformedContent);
+			_contentTransfomerContentType, _ORIGINAL_CONTENT,
+			transformedContent);
 
 		Assert.assertEquals(
 			transformedContent,
 			_contentTransformerHandler.transform(
-				_contentType, _ORIGINAL_CONTENT));
+				_contentTransfomerContentType, _ORIGINAL_CONTENT));
 	}
 
 	private ContentTransformer<String> _registerContentTransformer(
-			ContentTransformerContentType<String> contentType,
+			ContentTransformerContentType<String> contentTransformerContentType,
 			String originalContent, String transformedContent)
 		throws Exception {
 
@@ -161,7 +168,7 @@ public class ContentTransformerTest {
 		Mockito.when(
 			contentTransformer.getContentTransformerContentType()
 		).thenReturn(
-			contentType
+			contentTransformerContentType
 		);
 
 		Mockito.when(
@@ -176,12 +183,13 @@ public class ContentTransformerTest {
 	}
 
 	private void _registerFailingContentTransformer(
-			ContentTransformerContentType<String> contentType,
+			ContentTransformerContentType<String> contentTransformerContentType,
 			String originalContent)
 		throws Exception {
 
 		ContentTransformer<String> failingContentTransformer =
-			_registerContentTransformer(contentType, originalContent, "");
+			_registerContentTransformer(
+				contentTransformerContentType, originalContent, "");
 
 		Mockito.when(
 			failingContentTransformer.transform(originalContent)
@@ -192,10 +200,11 @@ public class ContentTransformerTest {
 
 	private static final String _ORIGINAL_CONTENT = "originalContent";
 
+	private final ContentTransformerContentType<String>
+		_contentTransfomerContentType =
+			new TestContentTransformerContentType<>();
 	private final ContentTransformerHandler _contentTransformerHandler =
 		new ContentTransformerHandler();
-	private final ContentTransformerContentType<String> _contentType =
-		new TestContentTransformerContentType<>();
 	private final MockServiceTrackerMap _serviceTrackerMap =
 		new MockServiceTrackerMap();
 
@@ -219,15 +228,18 @@ public class ContentTransformerTest {
 		}
 
 		@Override
-		public boolean containsKey(ContentTransformerContentType contentType) {
-			return _contentTransformerMap.containsKey(contentType);
+		public boolean containsKey(
+			ContentTransformerContentType contentTransformerContentType) {
+
+			return _contentTransformerMap.containsKey(
+				contentTransformerContentType);
 		}
 
 		@Override
 		public List<ContentTransformer> getService(
-			ContentTransformerContentType contentType) {
+			ContentTransformerContentType contentTransformerContentType) {
 
-			return _contentTransformerMap.get(contentType);
+			return _contentTransformerMap.get(contentTransformerContentType);
 		}
 
 		@Override
