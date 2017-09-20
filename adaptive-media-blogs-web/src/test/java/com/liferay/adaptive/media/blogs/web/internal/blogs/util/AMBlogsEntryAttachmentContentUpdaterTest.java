@@ -16,6 +16,7 @@ package com.liferay.adaptive.media.blogs.web.internal.blogs.util;
 
 import com.liferay.portal.kernel.portletfilerepository.PortletFileRepository;
 import com.liferay.portal.kernel.repository.model.FileEntry;
+import com.liferay.portal.kernel.test.util.RandomTestUtil;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.StringPool;
 
@@ -69,9 +70,11 @@ public class AMBlogsEntryAttachmentContentUpdaterTest extends PowerMockito {
 			imgTag);
 	}
 
-	private static final String _FILE_ENTRY_IMAGE_URL = "theUrl";
+	private static final String _FILE_ENTRY_IMAGE_URL =
+		RandomTestUtil.randomString();
 
-	private static final long _IMAGE_FILE_ENTRY_ID = 1989L;
+	private static final long _IMAGE_FILE_ENTRY_ID =
+		RandomTestUtil.randomLong();
 
 	private AMBlogsEntryAttachmentContentUpdater
 		_amBlogsEntryAttachmentContentUpdater;
