@@ -73,7 +73,8 @@ public class ContentTransformerHandler {
 				ContentTransformer contentTransformer =
 					bundleContext.getService(serviceReference);
 
-				emitter.emit(contentTransformer.getContentType());
+				emitter.emit(
+					contentTransformer.getContentTransformerContentType());
 
 				bundleContext.ungetService(serviceReference);
 			});

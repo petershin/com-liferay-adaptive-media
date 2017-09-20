@@ -159,7 +159,7 @@ public class ContentTransformerTest {
 			ContentTransformer.class);
 
 		Mockito.when(
-			contentTransformer.getContentType()
+			contentTransformer.getContentTransformerContentType()
 		).thenReturn(
 			contentType
 		);
@@ -242,7 +242,7 @@ public class ContentTransformerTest {
 		public void register(ContentTransformer contentTransformer) {
 			List<ContentTransformer> formNavigatorEntryConfigurationParsers =
 				_contentTransformerMap.computeIfAbsent(
-					contentTransformer.getContentType(),
+					contentTransformer.getContentTransformerContentType(),
 					key -> new ArrayList<>());
 
 			formNavigatorEntryConfigurationParsers.add(contentTransformer);
