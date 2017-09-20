@@ -1,3 +1,1 @@
-1.) OptimizeImagesBackgroundTaskConstants, rename? so AM is in the name somewhere?
-
 2.) AMBlogsEntryAttachmentContentUpdaterTest#_FILE_ENTRY_IMAGE_URL and _IMAGE_FILE_ENTRY_ID should be generated random values instead of hard coded values.
