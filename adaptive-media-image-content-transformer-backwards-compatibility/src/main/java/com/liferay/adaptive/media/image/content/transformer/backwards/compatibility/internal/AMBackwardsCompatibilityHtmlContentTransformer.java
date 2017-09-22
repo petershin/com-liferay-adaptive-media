@@ -14,6 +14,7 @@
 
 package com.liferay.adaptive.media.image.content.transformer.backwards.compatibility.internal;
 
+import com.liferay.adaptive.media.content.transformer.BaseRegexStringContentTransformer;
 import com.liferay.adaptive.media.content.transformer.ContentTransformer;
 import com.liferay.adaptive.media.content.transformer.ContentTransformerContentType;
 import com.liferay.adaptive.media.content.transformer.constants.ContentTransformerContentTypes;
@@ -36,7 +37,7 @@ import org.osgi.service.component.annotations.Reference;
 	service = ContentTransformer.class
 )
 public class AMBackwardsCompatibilityHtmlContentTransformer
-	implements ContentTransformer<String> {
+	extends BaseRegexStringContentTransformer {
 
 	@Override
 	public ContentTransformerContentType<String>
@@ -46,45 +47,14 @@ public class AMBackwardsCompatibilityHtmlContentTransformer
 	}
 
 	@Override
-	public String transform(String html) throws PortalException {
-		if (html == null) {
-			return null;
-		}
+	protected String createImageTag(String originalImgTag, FileEntry fileEntry)
+		throws PortalException {
 
-		Matcher matcher = _dlImageUrlPattern.matcher(html);
-
-		StringBuffer sb = new StringBuffer(html.length());
-
-		while (matcher.find()) {
-			FileEntry fileEntry = _getFileEntry(matcher);
-
-			String imgTag = matcher.group(0);
-
-			String adaptiveTag = _amImageHTMLTagFactory.create(
-				imgTag, fileEntry);
-
-			matcher.appendReplacement(
-				sb, Matcher.quoteReplacement(adaptiveTag));
-		}
-
-		matcher.appendTail(sb);
-
-		return sb.toString();
+		return _amImageHTMLTagFactory.create(originalImgTag, fileEntry);
 	}
 
-	@Reference(unbind = "-")
-	protected void setAMImageHTMLTagFactory(
-		AMImageHTMLTagFactory amImageHTMLTagFactory) {
-
-		_amImageHTMLTagFactory = amImageHTMLTagFactory;
-	}
-
-	@Reference(unbind = "-")
-	protected void setDLAppLocalService(DLAppLocalService dlAppLocalService) {
-		_dlAppLocalService = dlAppLocalService;
-	}
-
-	private FileEntry _getFileEntry(Matcher matcher) throws PortalException {
+	@Override
+	protected FileEntry getFileEntry(Matcher matcher) throws PortalException {
 		if (matcher.group(4) != null) {
 			long groupId = Long.valueOf(matcher.group(1));
 			String uuid = matcher.group(4);
@@ -98,6 +68,23 @@ public class AMBackwardsCompatibilityHtmlContentTransformer
 		String title = matcher.group(3);
 
 		return _dlAppLocalService.getFileEntry(groupId, folderId, title);
+	}
+
+	@Override
+	protected Pattern getPattern() {
+		return _dlImageUrlPattern;
+	}
+
+	@Reference(unbind = "-")
+	protected void setAMImageHTMLTagFactory(
+		AMImageHTMLTagFactory amImageHTMLTagFactory) {
+
+		_amImageHTMLTagFactory = amImageHTMLTagFactory;
+	}
+
+	@Reference(unbind = "-")
+	protected void setDLAppLocalService(DLAppLocalService dlAppLocalService) {
+		_dlAppLocalService = dlAppLocalService;
 	}
 
 	private static final Pattern _dlImageUrlPattern = Pattern.compile(
