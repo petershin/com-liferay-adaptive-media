@@ -46,11 +46,10 @@ public abstract class BaseRegexStringContentTransformer
 		while (matcher.find()) {
 			FileEntry fileEntry = getFileEntry(matcher);
 
-			String imgTag = matcher.group(0);
+			String replacement = getReplacement(matcher.group(0), fileEntry);
 
-			String amImageTag = createAMImageTag(imgTag, fileEntry);
-
-			matcher.appendReplacement(sb, Matcher.quoteReplacement(amImageTag));
+			matcher.appendReplacement(
+				sb, Matcher.quoteReplacement(replacement));
 		}
 
 		matcher.appendTail(sb);
@@ -58,13 +57,13 @@ public abstract class BaseRegexStringContentTransformer
 		return sb.toString();
 	}
 
-	protected abstract String createAMImageTag(
-			String originalImgTag, FileEntry fileEntry)
-		throws PortalException;
-
 	protected abstract FileEntry getFileEntry(Matcher matcher)
 		throws PortalException;
 
 	protected abstract Pattern getPattern();
+
+	protected abstract String getReplacement(
+			String originalImgTag, FileEntry fileEntry)
+		throws PortalException;
 
 }

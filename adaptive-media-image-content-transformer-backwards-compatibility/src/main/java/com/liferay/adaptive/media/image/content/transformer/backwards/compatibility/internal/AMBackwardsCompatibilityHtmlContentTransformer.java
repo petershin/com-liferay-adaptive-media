@@ -47,14 +47,6 @@ public class AMBackwardsCompatibilityHtmlContentTransformer
 	}
 
 	@Override
-	protected String createAMImageTag(
-			String originalImgTag, FileEntry fileEntry)
-		throws PortalException {
-
-		return _amImageHTMLTagFactory.create(originalImgTag, fileEntry);
-	}
-
-	@Override
 	protected FileEntry getFileEntry(Matcher matcher) throws PortalException {
 		if (matcher.group(4) != null) {
 			long groupId = Long.valueOf(matcher.group(1));
@@ -75,6 +67,13 @@ public class AMBackwardsCompatibilityHtmlContentTransformer
 	@Override
 	protected Pattern getPattern() {
 		return _IMG_PATTERN;
+	}
+
+	@Override
+	protected String getReplacement(String originalImgTag, FileEntry fileEntry)
+		throws PortalException {
+
+		return _amImageHTMLTagFactory.create(originalImgTag, fileEntry);
 	}
 
 	@Reference(unbind = "-")

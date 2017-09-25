@@ -63,14 +63,6 @@ public class HtmlContentTransformerImpl
 	}
 
 	@Override
-	protected String createAMImageTag(
-			String originalImgTag, FileEntry fileEntry)
-		throws PortalException {
-
-		return _amImageHTMLTagFactory.create(originalImgTag, fileEntry);
-	}
-
-	@Override
 	protected FileEntry getFileEntry(Matcher matcher) throws PortalException {
 		long fileEntryId = Long.valueOf(matcher.group(1));
 
@@ -80,6 +72,13 @@ public class HtmlContentTransformerImpl
 	@Override
 	protected Pattern getPattern() {
 		return _IMG_PATTERN;
+	}
+
+	@Override
+	protected String getReplacement(String originalImgTag, FileEntry fileEntry)
+		throws PortalException {
+
+		return _amImageHTMLTagFactory.create(originalImgTag, fileEntry);
 	}
 
 	@Reference(unbind = "-")
