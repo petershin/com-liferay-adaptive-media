@@ -52,7 +52,7 @@ public class AMBackwardsCompatibilityHtmlContentTransformerTest {
 	}
 
 	@Test
-	public void testContentTypeIsHTML() throws Exception {
+	public void testContentTransformerContentTypeIsHTML() throws Exception {
 		Assert.assertEquals(
 			ContentTransformerContentTypes.HTML,
 			_contentTransformer.getContentTransformerContentType());
@@ -80,6 +80,12 @@ public class AMBackwardsCompatibilityHtmlContentTransformerTest {
 			_CONTENT_PREFIX + "[REPLACED]" + _CONTENT_SUFFIX,
 			_contentTransformer.transform(
 				_CONTENT_WITH_IMAGE_AND_SINGLE_QUOTES));
+	}
+
+	@Test
+	public void testReturnsBlankForBlankContent() throws Exception {
+		Assert.assertEquals(
+			StringPool.BLANK, _contentTransformer.transform(StringPool.BLANK));
 	}
 
 	@Test

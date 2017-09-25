@@ -63,7 +63,8 @@ public class HtmlContentTransformerImpl
 	}
 
 	@Override
-	protected String createImageTag(String originalImgTag, FileEntry fileEntry)
+	protected String createAMImageTag(
+			String originalImgTag, FileEntry fileEntry)
 		throws PortalException {
 
 		return _amImageHTMLTagFactory.create(originalImgTag, fileEntry);

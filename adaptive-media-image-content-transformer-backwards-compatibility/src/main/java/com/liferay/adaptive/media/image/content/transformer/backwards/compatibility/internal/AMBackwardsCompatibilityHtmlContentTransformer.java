@@ -47,7 +47,8 @@ public class AMBackwardsCompatibilityHtmlContentTransformer
 	}
 
 	@Override
-	protected String createImageTag(String originalImgTag, FileEntry fileEntry)
+	protected String createAMImageTag(
+			String originalImgTag, FileEntry fileEntry)
 		throws PortalException {
 
 		return _amImageHTMLTagFactory.create(originalImgTag, fileEntry);
@@ -57,6 +58,7 @@ public class AMBackwardsCompatibilityHtmlContentTransformer
 	protected FileEntry getFileEntry(Matcher matcher) throws PortalException {
 		if (matcher.group(4) != null) {
 			long groupId = Long.valueOf(matcher.group(1));
+
 			String uuid = matcher.group(4);
 
 			return _dlAppLocalService.getFileEntryByUuidAndGroupId(
@@ -72,7 +74,7 @@ public class AMBackwardsCompatibilityHtmlContentTransformer
 
 	@Override
 	protected Pattern getPattern() {
-		return _dlImageUrlPattern;
+		return _IMG_PATTERN;
 	}
 
 	@Reference(unbind = "-")
@@ -87,7 +89,7 @@ public class AMBackwardsCompatibilityHtmlContentTransformer
 		_dlAppLocalService = dlAppLocalService;
 	}
 
-	private static final Pattern _dlImageUrlPattern = Pattern.compile(
+	private static final Pattern _IMG_PATTERN = Pattern.compile(
 		"<img\\s+src=['\"]/documents/(\\d+)/(\\d+)/([^/?]+)" +
 			"(?:/([-0-9a-fA-F]+))?(?:\\?t=\\d+)?['\"]\\s*/>");
 

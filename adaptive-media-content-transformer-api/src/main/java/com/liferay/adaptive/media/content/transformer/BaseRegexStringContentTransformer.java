@@ -16,6 +16,7 @@ package com.liferay.adaptive.media.content.transformer;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.repository.model.FileEntry;
+import com.liferay.portal.kernel.util.Validator;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -32,8 +33,8 @@ public abstract class BaseRegexStringContentTransformer
 
 	@Override
 	public String transform(String content) throws PortalException {
-		if (content == null) {
-			return null;
+		if (Validator.isNull(content)) {
+			return content;
 		}
 
 		Pattern pattern = getPattern();
@@ -47,10 +48,9 @@ public abstract class BaseRegexStringContentTransformer
 
 			String imgTag = matcher.group(0);
 
-			String adaptiveTag = createImageTag(imgTag, fileEntry);
+			String amImageTag = createAMImageTag(imgTag, fileEntry);
 
-			matcher.appendReplacement(
-				sb, Matcher.quoteReplacement(adaptiveTag));
+			matcher.appendReplacement(sb, Matcher.quoteReplacement(amImageTag));
 		}
 
 		matcher.appendTail(sb);
@@ -58,7 +58,7 @@ public abstract class BaseRegexStringContentTransformer
 		return sb.toString();
 	}
 
-	protected abstract String createImageTag(
+	protected abstract String createAMImageTag(
 			String originalImgTag, FileEntry fileEntry)
 		throws PortalException;
 
