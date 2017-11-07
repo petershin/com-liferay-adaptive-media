@@ -7,7 +7,7 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-jsptaglibrary_2_1.xsd"
 >
 	<tlib-version>1.0</tlib-version>
-	<short-name>adaptive-media</short-name>
+	<short-name>liferay-adaptive-media</short-name>
 	<uri>http://liferay.com/tld/adaptive-media-image</uri>
 	<tag>
 		<name>img</name>
