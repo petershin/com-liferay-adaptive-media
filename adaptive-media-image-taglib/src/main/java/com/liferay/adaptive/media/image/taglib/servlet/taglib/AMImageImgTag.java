@@ -45,9 +45,9 @@ public class AMImageImgTag extends AttributesTagSupport {
 	@Override
 	public int doEndTag() throws JspException {
 		try {
-			JspWriter out = pageContext.getOut();
+			JspWriter jspWriter = pageContext.getOut();
 
-			out.print(_getHTMLTag());
+			jspWriter.write(_getHTMLTag());
 
 			return EVAL_PAGE;
 		}
@@ -63,21 +63,20 @@ public class AMImageImgTag extends AttributesTagSupport {
 	private String _getFallbackTag() throws PortalException {
 		Map<String, Object> dynamicAttributes = getDynamicAttributes();
 
-		StringBundler sb = new StringBundler(4 + 6 * dynamicAttributes.size());
+		StringBundler sb = new StringBundler(
+			4 + (4 * dynamicAttributes.size()));
 
 		sb.append("<img ");
 
 		for (Map.Entry<String, Object> entry : dynamicAttributes.entrySet()) {
 			sb.append(entry.getKey());
-			sb.append(StringPool.EQUAL);
-			sb.append(StringPool.QUOTE);
+			sb.append("=\"");
 
 			Object value = entry.getValue();
 
 			sb.append(HtmlUtil.escapeAttribute(value.toString()));
 
-			sb.append(StringPool.QUOTE);
-			sb.append(StringPool.SPACE);
+			sb.append("\" ");
 		}
 
 		ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute(
@@ -87,9 +86,9 @@ public class AMImageImgTag extends AttributesTagSupport {
 			_fileVersion.getFileEntry(), _fileVersion, themeDisplay,
 			StringPool.BLANK);
 
-		sb.append("src='");
+		sb.append("src=\"");
 		sb.append(downloadURL);
-		sb.append("' />");
+		sb.append("\" />");
 
 		return sb.toString();
 	}
